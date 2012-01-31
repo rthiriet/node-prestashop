@@ -1,0 +1,83 @@
+
+/**
+ * Module dependencies.
+ */
+
+var express = require('express')
+  , routes = require('./routes')
+  , rest = require('./lib/rest')
+  , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
+
+var app = module.exports = express.createServer();
+
+// Configuration
+
+app.configure(function(){
+  app.set('views', __dirname + '/views');
+  app.set('view engine', 'jade');
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.static(__dirname + '/public'));
+});
+
+app.configure('development', function(){
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true })); 
+});
+
+app.configure('production', function(){
+  app.use(express.errorHandler());
+});
+
+// Routes
+
+app.get('/', routes.index);
+
+/**
+ * working client request
+ */
+
+app.get('/test',
+    function (req, res) {
+        var username = 'TUS5R6QL1D7V0VDEE5ZLFXBH30VOVQ6Z';
+        var password = '';
+        var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
+        var http = require('http');
+        var google = http.createClient(80, 'www.google.de');
+        var request = google.request('GET', '/prestashop/api/products',
+          {'host': 'superstar.f6.de', 'Authorization': auth});
+        console.log(request);
+        request.end();
+        request.on('response', function (response) {
+          console.log('STATUS: ' + response.statusCode);
+          console.log('HEADERS: ' + JSON.stringify(response.headers));
+          response.setEncoding('utf8');
+          response.on('data', function (chunk) {
+            console.log('BODY: ' + chunk);
+            res.send(chunk);
+          });
+        });
+    });
+/**
+ * REST GET PRODUCTS
+ *
+ * TODO : view oriented programming
+ */
+
+app.get('/api', function (req, res) {
+        var prestashop = new rest();
+        var products = prestashop.ResterFn('get','products');
+        products.on('received',function(data){
+            var x;
+            for (x in data.products.product) {
+                inspect(data.products.product[x]['@'].id);
+            }
+            res.render('index',{ title: JSON.stringify(data) });
+        }).on('error',function(data){
+            res.send(data);
+            })
+    }
+    );
+
+app.listen(3000);
+console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
