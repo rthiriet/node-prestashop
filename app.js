@@ -5,7 +5,7 @@
 
 var express = require('express')
   , routes = require('./routes')
-  , rest = require('./lib/rest')
+  , prestashop = require('./lib/prestashop')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
 var app = module.exports = express.createServer();
@@ -32,6 +32,8 @@ app.configure('production', function(){
 // Routes
 
 app.get('/', routes.index);
+
+app.get('/test2', routes.test);
 
 /**
  * working client request
@@ -65,9 +67,9 @@ app.get('/test',
  */
 
 app.get('/api', function (req, res) {
-        var prestashop = new rest();
-        var products = prestashop.ResterFn('get','products');
-        products.on('received',function(data){
+        var prestashopInst = new prestashop();
+        var products = prestashopInst.productList();
+        products.on('productListReceived',function(data){
             var x;
             for (x in data.products.product) {
                 inspect(data.products.product[x]['@'].id);
@@ -78,6 +80,8 @@ app.get('/api', function (req, res) {
             })
     }
     );
+
+app.get('/apiTest', routes.api);
 
 app.listen(3000);
 console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
