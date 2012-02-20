@@ -26,7 +26,7 @@ everyauth.everymodule.findUserById( function (userId, callback) {
 });
 
 
-
+process.env.NODE_ENV = 'production';
 
 var app = module.exports = express.createServer();
 

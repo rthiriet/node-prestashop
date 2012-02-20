@@ -7,7 +7,7 @@ mixin imgurl(id,link_rewrite,size,productid)
     -   else
         size = ''
     p test image
-        //img(src=image)
+        //-img(src=image)
         img(src = baseUrl + id + size + '/' + link_rewrite + '.jpg')
 
 
@@ -16,11 +16,13 @@ p Welcome to
         - var linkRewrite = items.product.link_rewrite.language['#']
         - var productid=items.product.id
         h1 !{items.product.name.language['#']}
+        a(href='#product'+productid).nyroModal
+            mixin imgurl(items.product.id_default_image['#'],linkRewrite)
         h2 !{items.product.manufacturer_name['#']}
-        mixin imgurl(items.product.id_default_image['#'],linkRewrite)
         !{items.product.description_short.language['#']}
-        .hidden !{items.product.description.language['#']}
-        ul
-            each image in items.product.associations.images.image
-                li
-                    mixin imgurl(image.id,linkRewrite,'medium', productid)
+        div(id='product'+productid).hidden
+            !{items.product.description.language['#']}
+            ul
+                each image in items.product.associations.images.image
+                    li
+                        mixin imgurl(image.id,linkRewrite,'medium', productid)
