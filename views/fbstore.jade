@@ -1,13 +1,13 @@
 - var baseUrl = 'http://superstar.f6.de/prestashop/';
 
 mixin imgurl(id,link_rewrite,size,productid)
-    - var image = getPictures(productid, id)
+    //- var image = getPictures(productid, id)
     -   if (typeof(size)!='undefined' && size != '')
         size = '-' + size
     -   else
         size = ''
     p test image
-        img(src=image)
+        //img(src=image)
         img(src = baseUrl + id + size + '/' + link_rewrite + '.jpg')
 
 
