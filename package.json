@@ -7,5 +7,8 @@
     , "jade": ">= 0.0.1"
     , "xml2js": "0.1.13"
     , "async": "0.1.15"
+    , "fbgraph": "0.2.1"
+    , "everyauth": "0.2.18"
+    , "api_request":"0.5.4"
   }
 }

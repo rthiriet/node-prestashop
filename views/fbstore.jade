@@ -1,0 +1,26 @@
+- var baseUrl = 'http://superstar.f6.de/prestashop/';
+
+mixin imgurl(id,link_rewrite,size,productid)
+    - var image = getPictures(productid, id)
+    -   if (typeof(size)!='undefined' && size != '')
+        size = '-' + size
+    -   else
+        size = ''
+    p test image
+        img(src=image)
+        img(src = baseUrl + id + size + '/' + link_rewrite + '.jpg')
+
+
+p Welcome to
+    each items in products
+        - var linkRewrite = items.product.link_rewrite.language['#']
+        - var productid=items.product.id
+        h1 !{items.product.name.language['#']}
+        h2 !{items.product.manufacturer_name['#']}
+        mixin imgurl(items.product.id_default_image['#'],linkRewrite)
+        !{items.product.description_short.language['#']}
+        .hidden !{items.product.description.language['#']}
+        ul
+            each image in items.product.associations.images.image
+                li
+                    mixin imgurl(image.id,linkRewrite,'medium', productid)
