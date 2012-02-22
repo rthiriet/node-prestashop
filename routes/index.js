@@ -1,5 +1,7 @@
 var prestashop = require('../lib/prestashop'),
-    inspect = require('eyes').inspector({styles: {all: 'magenta'}});
+    inspect = require('eyes').inspector({styles: {all: 'magenta'}}),
+    prestashopImage = require('../lib/prestashopimages');
+
 
 /*
  * GET home page.
@@ -9,6 +11,10 @@ exports.index = function(req, res){
   inspect(req.session);
   res.render('index', { title: 'Express' })
 };
+
+/*
+ * GET FB homepage.
+ */
 
 exports.api= function(req,res){
     inspect(req.session);
@@ -25,4 +31,19 @@ exports.api= function(req,res){
         .on('error',function(data){
             res.send(data);
                 })
-    }
+    };
+
+/*
+ * GET product images.
+ */
+
+exports.images= function(req,res){
+    var prestashopImgInst = new prestashopImage();
+    var image = prestashopImgInst.getImage(req.params.productid,req.params.imageid);
+    image.on(req.params.productid+'/'+req.params.imageid+'ImageReceived',function(data){
+        console.log('productId: '+req.params.productid+' imgId: '+req.params.imageid);
+        res.contentType('image/jpeg');
+        res.send(data);
+        //res.render('image', {image:base64Image});
+        });
+    };

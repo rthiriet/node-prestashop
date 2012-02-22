@@ -7,7 +7,6 @@ var express = require('express')
   , routes = require('./routes')
   , prestashop = require('./lib/prestashop')
   , everyauth = require('everyauth')
-  , fbgraph = require('fbgraph')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
 everyauth.facebook
@@ -15,7 +14,7 @@ everyauth.facebook
   .appSecret('ef14c6ac15a0116a69705f55eb80c5b3')
   .scope('user_likes,user_photos,user_photo_video_tags')
   .entryPath('/')
-  .redirectPath('/apiTest')
+  .redirectPath('/fbhome')
   .findOrCreateUser(function() {
     return({});
   });
@@ -26,21 +25,10 @@ everyauth.everymodule.findUserById( function (userId, callback) {
 });
 
 
-process.env.NODE_ENV = 'production';
+//process.env.NODE_ENV = 'production';
 
 var app = module.exports = express.createServer();
 
-
-//helpers
-
-app.helpers({
-    getPictures: function(productid, imageid){
-        // api request for pictures
-        console.log('in helper');
-        var prestashop = new prestashop();
-          prestashop.getImage(productid,imageid).on('imageReady',function(data){return data});
-        }
-});
 
 // Configuration
 
@@ -79,57 +67,16 @@ everyauth.helpExpress(app);
 
 app.get('/indexer', routes.index);
 
-//app.get('/test2', routes.test);
 
 /**
- * working client request
+ * product image
  */
-
-/*app.get('/test',
-    function (req, res) {
-        var username = 'TUS5R6QL1D7V0VDEE5ZLFXBH30VOVQ6Z';
-        var password = '';
-        var auth = 'Basic ' + new Buffer(username + ':' + password).toString('base64');
-        var http = require('http');
-        var google = http.createClient(80, 'www.google.de');
-        var request = google.request('GET', '/prestashop/api/products',
-          {'host': 'superstar.f6.de', 'Authorization': auth});
-        console.log(request);
-        request.end();
-        request.on('response', function (response) {
-          console.log('STATUS: ' + response.statusCode);
-          console.log('HEADERS: ' + JSON.stringify(response.headers));
-          response.setEncoding('utf8');
-          response.on('data', function (chunk) {
-            console.log('BODY: ' + chunk);
-            res.send(chunk);
-          });
-        });
-    });*/
-
+app.get('/images/:productid/:imageid', routes.images);
 
 /**
- * REST GET PRODUCTS
- *
- * TODO : view oriented programming
+ * Facebook authorized page
  */
-
-app.get('/api', function (req, res) {
-        var prestashopInst = new prestashop();
-        var products = prestashopInst.productList();
-        products.on('productListReceived',function(data){
-            var x;
-            for (x in data.products.product) {
-                inspect(data.products.product[x]['@'].id);
-            }
-            res.render('index',{ title: JSON.stringify(data) });
-        }).on('error',function(data){
-            res.send(data);
-            })
-    }
-    );
-
-app.get('/apiTest', routes.api);
+app.get('/fbhome', routes.api);
 
 app.post('/',function(request,response){
     response.redirect('/');
