@@ -1,32 +1,36 @@
 - var baseUrl = 'http://superstar.f6.de/prestashop/';
 
 mixin imgurl(id,link_rewrite,size,productid)
-    //- var image = getPictures(productid, id)
     -   if (typeof(size)!='undefined' && size != '')
         size = '-' + size
     -   else
         size = ''
-    p
-        //-img(src=image)
-        img(src = baseUrl + id + size + '/' + link_rewrite + '.jpg')
+    img(src = baseUrl + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
 
 div#fbbody
-    div#header
+    div#header.box
         h1 Welcome to the Full6Berlin social shop
-    p You'll find below the list of available products
-        each items in products
-            - var linkRewrite = items.product.link_rewrite.language['#']
-            - var productid=items.product.id
-            h2 !{items.product.name.language['#']}
-            a(href='#product'+productid).nyroModal
-                mixin imgurl(items.product.id_default_image['#'],linkRewrite, 'medium')
-            h3 !{items.product.manufacturer_name['#']}
-            !{items.product.description_short.language['#']}
-            div(id='product'+productid).hidden
-                !{items.product.description.language['#']}
-                ul
-                    each image in items.product.associations.images.image
-                        li
-                            a(href='/images/'+productid+'/'+image.id+'/').nyroModal
-                                mixin imgurl(image.id,linkRewrite,'medium', productid)
-            div.fb-like(data-href='http://apps.facebook.com/fsixdetestlocal/'+productid, data-send='true', data-width='450', data-show_faces='true')
+    each items, i in products
+        if(items.product.active == 1)
+            - var styleToAdd = '';
+            - (i%2 == 0) ? styleToAdd = '' : styleToAdd = 'rightBox'
+            div.product.box(class=styleToAdd)
+                - var linkRewrite = items.product.link_rewrite.language['#']
+                - var productid=items.product.id
+                a(href='#product'+productid).nyroModal
+                    .productImage
+                        mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
+                    h2 !{items.product.name.language['#']}
+                    .short !{items.product.description_short.language['#'].substr(0,100)}...
+                    .price &euro; !{items.product.price}
+                //-div.fb-like(data-href='http://apps.facebook.com/fsixdetestlocal/'+productid, data-send='true', data-width='450', data-show_faces='true')
+                div(id='product'+productid).hidden.popin
+                    h3 !{items.product.name.language['#']}
+                    ul
+                        each image in items.product.associations.images.image
+                            li
+                                a(href='/images/'+productid+'/'+image.id+'/').nyroModal
+                                    mixin imgurl(image.id,linkRewrite,'medium', productid)
+                    .short !{items.product.description_short.language['#']}
+                    !{items.product.description.language['#']}
+    div(style = 'float:none;') &nbsp;

@@ -1,5 +1,5 @@
-!!!
-html(xmlns:fb="http://ogp.me/ns/fb#")
+<!DOCTYPE html>
+html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
   head
     title title
     link(rel='stylesheet', href='/stylesheets/style.css')
@@ -10,7 +10,7 @@ html(xmlns:fb="http://ogp.me/ns/fb#")
             $(function() {
                 $('.nyroModal').nyroModal();
             });
-  body!= body
+  body.bodyfbapp!= body
     div#fb-root
     script.
         (function(d, s, id) {

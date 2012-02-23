@@ -1,23 +1,68 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-}
-#fbbody{
-  width:520px!important;
-  background-color: #f4f4f7;
-  padding:5px;
+body.bodyfbapp {
+    padding: 0;
+    margin: 0;
+    font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+    color: #000000;
+    text-decoration: none;
+}
+
+h1 {
+    background-color: #d8d8da;
+    margin: 0;
+    font-size: 1.4em;
+}
+h2{
+    margin: 15px 0 0;
+    font-size: 1.2em;
+}
+h3{
+    margin: 15px 0 0;
+    font-size: 1.6em;
+}
+#fbbody{
+    width:520px;
+    background-color: #f4f4f7;
+    padding: 5px;
+    overflow: hidden;
+}
+.box {
+    background-color:white;
+    border:1px solid #e3e3e3;
+    padding: 5px;
+    float: left;
+    margin-top: 25px;
 }
 
 #header{
-  border:1px solid #e3e3e3;
-  background-color:white;
+    width:508px;
+}
+.product {
+    width:245px;
+    height: 285px;
+    float: left;
+    display: block;
+}
+.productImage{
+    width:100%;
+    background-color: #f0f0f0;
+    height: 150px;
+    overflow: hidden;
+    text-align: center;
+}
+.rightBox{
+    margin-left: 6px;
 }
 
 .hidden{
     display:none;
     width:500px;
+}
+.popin{
+    padding: 5px;
+}
+.price{
+    font-weight: bold;
 }
