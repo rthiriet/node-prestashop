@@ -9,9 +9,11 @@ var express = require('express')
   , everyauth = require('everyauth')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
+console.log("env vars : FBAPPID - "+process.env.FACEBOOK_APP_ID+ " // FBSecr : "+process.env.FACEBOOK_SECRET);
+
 everyauth.facebook
-  .appId('291938840860900')
-  .appSecret('ef14c6ac15a0116a69705f55eb80c5b3')
+  .appId(process.env.FACEBOOK_APP_ID)
+  .appSecret(process.env.FACEBOOK_SECRET)
   .scope('user_likes,user_photos,user_photo_video_tags')
   .entryPath('/')
   .redirectPath('/fbhome')
