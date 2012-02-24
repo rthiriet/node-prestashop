@@ -1,15 +1,29 @@
 - var baseUrl = 'http://superstar.f6.de/prestashop/';
 
-mixin imgurl(id,link_rewrite,size,productid)
+mixin imgurl(id,link_rewrite,size,productid,type)
     -   if (typeof(size)!='undefined' && size != '')
         size = '-' + size
     -   else
         size = ''
+    -   if (typeof(type)!='undefined' && type != '')
+        type = type
+    -   else
+        type = 'p'
     img(src = baseUrl + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
 
-div#fbbody
-    div#header.box
+#fbbody
+    #header.box
         h1 Welcome to the Full6Berlin social shop
+        //- TODO add dynamic category pictures retrieving
+        //header carousel
+        #carouselHeader
+            img(src="http://superstar.f6.de/prestashop/img/c/5-category.jpg")
+            img(src="http://superstar.f6.de/prestashop/img/c/6-category.jpg")
+            img(src="http://superstar.f6.de/prestashop/img/c/7-category.jpg")
+            img(src="http://superstar.f6.de/prestashop/img/c/8-category.jpg")
+    #headerBullet
+
+
     each items, i in products
         if(items.product.active == 1)
             - var styleToAdd = '';
@@ -22,15 +36,62 @@ div#fbbody
                         mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
                     h2 !{items.product.name.language['#']}
                     .short !{items.product.description_short.language['#'].substr(0,100)}...
-                    .price &euro; !{items.product.price}
-                //-div.fb-like(data-href='http://apps.facebook.com/fsixdetestlocal/'+productid, data-send='true', data-width='450', data-show_faces='true')
+                div
+                    .price
+                        a(href='#product'+productid).nyroModal
+                            &euro; !{items.product.price}
+                    <!-- AddThis Button BEGIN -->
+                    div.addthis_toolbox.addthis_default_style.addthisFBShop(addthis:url=items.product.location)
+                        a.addthis_button_preferred_1
+                        a.addthis_button_preferred_4
+                        a.addthis_button_compact
+                    script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f46883a499d53f1")
+                    <!-- AddThis Button END -->
+
+                //product popin
                 div(id='product'+productid).hidden.popin
-                    h3 !{items.product.name.language['#']}
-                    ul
+                    #popinHeader
+                        #popinTitle
+                            h3 !{items.product.name.language['#']}
+                        #popinPrice
+                            .price &euro; !{items.product.price}
+                    //carousel
+                    #carousel
                         each image in items.product.associations.images.image
-                            li
-                                a(href='/images/'+productid+'/'+image.id+'/').nyroModal
-                                    mixin imgurl(image.id,linkRewrite,'medium', productid)
-                    .short !{items.product.description_short.language['#']}
-                    !{items.product.description.language['#']}
+                            a(href='/images/'+productid+'/'+image.id+'/').nyroModal
+                                mixin imgurl(image.id,linkRewrite,'carousel', productid)
+                    #popinBuy
+                        .short !{items.product.description_short.language['#']}
+                        .buyButton
+                            a(href=items.product.location,target='_blank') BUY IT NOW
+                    div(style = 'float:none;clear:both') &nbsp;
+                    .popinContent !{items.product.description.language['#']}
+                    <!-- AddThis Button BEGIN -->
+                    div.addthis_toolbox.addthis_default_style(addthis:url=items.product.location)
+                        a.addthis_button_facebook_like(fb:like:layout="button_count")
+                        a.addthis_button_tweet
+                        a.addthis_button_google_plusone(g:plusone:size="medium")
+                        a.addthis_counter.addthis_pill_style
+                    script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
+                    <!-- AddThis Button END -->
+
     div(style = 'float:none;') &nbsp;
+    script(type="text/javascript").
+        jQuery(function($) {
+            $( "#carousel" ).rcarousel({
+                width: 625,
+                height: 300,
+                visible: 1,
+                step: 1,
+                speed: 700,
+                auto: {enabled: true},
+                });
+            $( "#carouselHeader" ).rcarousel({
+                width: 508,
+                height: 200,
+                visible: 1,
+                step: 1,
+                speed: 500,
+                auto: {enabled: true},
+                });
+        });

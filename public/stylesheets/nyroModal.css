@@ -54,7 +54,7 @@ a.nyroModalCloseButton {
 }
 .nyroModalLink, .nyroModalDom, .nyroModalForm, .nyroModalFormFile {
 	position: relative;
-	padding: 10px;
+	padding: 20px;
 	min-height: 250px;
 	min-width: 250px;
 	max-width: 1000px;

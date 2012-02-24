@@ -12,15 +12,17 @@ a {
 h1 {
     background-color: #d8d8da;
     margin: 0;
-    font-size: 1.4em;
+    font-size: 1.6em;
+    text-align: center;
+    padding-bottom: 5px;
 }
 h2{
     margin: 15px 0 0;
     font-size: 1.2em;
 }
 h3{
-    margin: 15px 0 0;
-    font-size: 1.6em;
+    margin: 0px 0 15px;
+    font-size: 1.8em;
 }
 #fbbody{
     width:520px;
@@ -65,4 +67,52 @@ h3{
 }
 .price{
     font-weight: bold;
+    float: left;
+}
+#carousel{
+    border: 1px solid #e3e2e2;
+    padding: 5px;
+    background-color: white;
+}
+#popinHeader{
+    width:100%;
+}
+#popinTitle{
+    float: left;
+    width: 80%;
+}
+#popinPrice{
+    font-size: 1.2em;
+    padding-top: 7px;
+    text-align: right;
+}
+#popinPrice .price{
+    float: none!important;
+}
+#popinBuy{
+    width:100%;
+    margin-top: 15px;
+}
+.short{
+    float: left;
+}
+.buyButton{
+    background-color: #fe830f;
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #da6c03;
+    float: right;
+}
+.buyButton a, .buyButton a:hover, .buyButton a:visited {
+    color: #ffffff;
+    font-weight: bold;
+}
+#popinBuy p{
+    margin: 0;
+    padding: 0;
+    color: #6E6E6E;
+}
+.addthisFBShop{
+    width: 30%;
+    float: right;
 }
