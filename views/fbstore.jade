@@ -21,7 +21,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             img(src="http://superstar.f6.de/prestashop/img/c/6-category.jpg")
             img(src="http://superstar.f6.de/prestashop/img/c/7-category.jpg")
             img(src="http://superstar.f6.de/prestashop/img/c/8-category.jpg")
-    #headerBullet
+    #carouselPages
 
 
     each items, i in products
@@ -74,6 +74,10 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                         a.addthis_counter.addthis_pill_style
                     script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
                     <!-- AddThis Button END -->
+                    <!-- FB COmments BEGIN -->
+                    div.fb-comments(data-href=items.product.location,data-num-posts="2",data-width="470",style="margin-top:10px;")
+                    <!-- FB COmments END -->
+
 
     div(style = 'float:none;') &nbsp;
     script(type="text/javascript").
@@ -86,6 +90,47 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                 speed: 700,
                 auto: {enabled: true},
                 });
+
+            function generatePages() {
+                var _total, i, _link;
+
+                _total = $( "#carouselHeader" ).rcarousel( "getTotalPages" );
+
+                for ( i = 0; i < _total; i++ ) {
+                    _link = $( "<a href='#'></a>" );
+
+                    $(_link)
+                        .bind("click", {page: i},
+                            function( event ) {
+                                $( "#carouselHeader" ).rcarousel( "goToPage", event.data.page );
+                                event.preventDefault();
+                            }
+                        )
+                        .addClass( "bullet off" )
+                        .appendTo( "#carouselPages" );
+                }
+
+                // mark first page as active
+                $( "a:eq(0)", "#carouselPages" )
+                    .removeClass( "off" )
+                    .addClass( "on" )
+                    .css( "background-image", "url(images/bulleton.png)" );
+
+                //calculate nav bar width
+                $( '#carouselPages' ).css('width',($( "#carouselHeader" ).rcarousel( "getTotalPages" ) * $("a:eq(0)", "#carouselPages").outerWidth(true)));
+
+            }
+
+            function pageLoaded( event, data ) {
+                $( "a.on", "#carouselPages" )
+                    .removeClass( "on" )
+                    .css( "background-image", "url(images/bulletoff.png)" );
+
+                $( "a", "#carouselPages" )
+                    .eq( data.page )
+                    .addClass( "on" )
+                    .css( "background-image", "url(images/bulleton.png)" );
+            }
             $( "#carouselHeader" ).rcarousel({
                 width: 508,
                 height: 200,
@@ -93,5 +138,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                 step: 1,
                 speed: 500,
                 auto: {enabled: true},
+                start: generatePages,
+                pageLoaded: pageLoaded
                 });
         });
