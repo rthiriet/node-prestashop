@@ -7,9 +7,13 @@ var express = require('express')
   , routes = require('./routes')
   , prestashop = require('./lib/prestashop')
   , everyauth = require('everyauth')
+  , fbgraph = require('fbgraph')
+  , mongoose = require('mongoose')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
 console.log("env vars : FBAPPID - "+process.env.FACEBOOK_APP_ID+ " // FBSecr : "+process.env.FACEBOOK_SECRET);
+
+mongoose.connect('mongodb://localhost/fbshop');
 
 everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)
@@ -20,6 +24,8 @@ everyauth.facebook
   .findOrCreateUser(function() {
     return({});
   });
+
+var api = require('./controllers/api.js');
 
 everyauth.everymodule.findUserById( function (userId, callback) {
   return req.session.auth.facebook.user;
@@ -61,6 +67,7 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+var io = require('socket.io').listen(app);
 
 everyauth.debug=true;
 everyauth.helpExpress(app);
@@ -78,12 +85,18 @@ app.get('/images/:productid/:imageid', routes.images);
 /**
  * Facebook authorized page
  */
-app.get('/fbhome', routes.api);
+app.get('/fbhome', routes.fbshop);
 
 app.post('/',function(request,response){
     response.redirect('/');
 });
 
+io.sockets.on('connection', function (socket) {
+  socket.emit('news', { hello: 'world' });
+  socket.on('my other event', function (data) {
+    console.log(data);
+  });
+});
 
 var port = process.env.PORT || 3000;
 app.listen(port);
