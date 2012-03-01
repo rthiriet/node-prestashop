@@ -1,4 +1,4 @@
-- var baseUrl = 'http://superstar.f6.de/prestashop/';
+- var baseUrl = appUrl;
 
 mixin imgurl(id,link_rewrite,size,productid,type)
     -   if (typeof(size)!='undefined' && size != '')
@@ -9,7 +9,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
         type = type
     -   else
         type = 'p'
-    img(src = baseUrl + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
+    img(src = baseUrl + '/' + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
 
 #fbbody
     #header.box
@@ -17,10 +17,10 @@ mixin imgurl(id,link_rewrite,size,productid,type)
         //- TODO add dynamic category pictures retrieving
         //header carousel
         #carouselHeader
-            img(src="http://superstar.f6.de/prestashop/img/c/5-category.jpg")
-            img(src="http://superstar.f6.de/prestashop/img/c/6-category.jpg")
-            img(src="http://superstar.f6.de/prestashop/img/c/7-category.jpg")
-            img(src="http://superstar.f6.de/prestashop/img/c/8-category.jpg")
+            img(src=baseUrl+"/img/c/5-category.jpg")
+            img(src=baseUrl+"/img/c/6-category.jpg")
+            img(src=baseUrl+"/img/c/7-category.jpg")
+            img(src=baseUrl+"/img/c/8-category.jpg")
     #carouselPages
 
 

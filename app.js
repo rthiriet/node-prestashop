@@ -61,6 +61,9 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
+app.helpers({
+    appUrl: process.env.PRESTASHOPURL
+});
 
 everyauth.debug=true;
 everyauth.helpExpress(app);
