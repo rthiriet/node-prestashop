@@ -11,7 +11,7 @@ var express = require('express')
   , mongoose = require('mongoose')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
-console.log("env vars : FBAPPID - "+process.env.FACEBOOK_APP_ID+ " // FBSecr : "+process.env.FACEBOOK_SECRET);
+inspect(process.env);
 
 mongoose.connect('mongodb://localhost/fbshop');
 
@@ -50,7 +50,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.session({ secret: 'prestashopsecret'}));
   app.use(function(request, response, next) {
-      inspect(request.headers);
+      //inspect(request.headers);
       var method = request.headers['x-forwarded-proto'] || 'http';
       everyauth.facebook.myHostname(method + '://' + request.headers.host);
       next();
@@ -68,6 +68,10 @@ app.configure('production', function(){
 });
 
 var io = require('socket.io').listen(app);
+
+app.helpers({
+    appUrl: process.env.PRESTASHOPURL
+});
 
 everyauth.debug=true;
 everyauth.helpExpress(app);
