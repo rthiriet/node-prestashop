@@ -9,7 +9,8 @@ var express = require('express')
   , everyauth = require('everyauth')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
-console.log("env vars : FBAPPID - "+process.env.FACEBOOK_APP_ID+ " // FBSecr : "+process.env.FACEBOOK_SECRET);
+inspect(process.env);
+
 
 everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)
@@ -44,7 +45,7 @@ app.configure(function(){
   app.use(express.cookieParser());
   app.use(express.session({ secret: 'prestashopsecret'}));
   app.use(function(request, response, next) {
-      inspect(request.headers);
+      //inspect(request.headers);
       var method = request.headers['x-forwarded-proto'] || 'http';
       everyauth.facebook.myHostname(method + '://' + request.headers.host);
       next();

@@ -8,7 +8,7 @@ var prestashop = require('../lib/prestashop'),
  */
 
 exports.index = function(req, res){
-  inspect(req.session);
+  //inspect(req.session);
   res.render('index', { title: 'Express' })
 };
 
@@ -17,7 +17,7 @@ exports.index = function(req, res){
  */
 
 exports.api= function(req,res){
-    inspect(req.session);
+    //inspect(req.session);
     var prestashopInst = new prestashop();
     var products = prestashopInst.productList();
     console.log('productList requested');
