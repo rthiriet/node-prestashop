@@ -119,8 +119,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                 // mark first page as active
                 $( "a:eq(0)", "#carouselPages" )
                     .removeClass( "off" )
-                    .addClass( "on" )
-                    .css( "background-image", "url(images/bulleton.png)" );
+                    .addClass( "on" );
 
                 //calculate nav bar width
                 $( '#carouselPages' ).css('width',($( "#carouselHeader" ).rcarousel( "getTotalPages" ) * $("a:eq(0)", "#carouselPages").outerWidth(true)));
@@ -130,12 +129,12 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             function pageLoaded( event, data ) {
                 $( "a.on", "#carouselPages" )
                     .removeClass( "on" )
-                    .css( "background-image", "url(images/bulletoff.png)" );
+                    .addClass( "off" );
 
                 $( "a", "#carouselPages" )
                     .eq( data.page )
-                    .addClass( "on" )
-                    .css( "background-image", "url(images/bulleton.png)" );
+                    .removeClass( "off" )
+                    .addClass( "on" );
             }
             $( "#carouselHeader" ).rcarousel({
                 width: 508,

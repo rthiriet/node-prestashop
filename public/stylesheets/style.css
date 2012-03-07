@@ -91,6 +91,12 @@ h3{
     margin-right: 5px;
     float: left;
 }
+.bullet.on {
+    background: url(/images/bulleton.png) center center no-repeat !important;
+}
+.bullet.off {
+    background: url(/images/bulletoff.png) center center no-repeat;
+}
 
 #popinHeader{
     width:100%;
