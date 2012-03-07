@@ -87,7 +87,7 @@ app.get('/images/:productid/:imageid', routes.images);
 /**
  * create a group
  */
-app.get('/createevent/:userid/:productid/:productname', routes.cre ateEvent);
+app.get('/createevent/:userid/:productid/:productname', routes.createEvent);
 
 /**
  * Facebook authorized page
