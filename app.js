@@ -7,7 +7,6 @@ var express = require('express')
   , routes = require('./routes')
   , prestashop = require('./lib/prestashop')
   , everyauth = require('everyauth')
-  , fbgraph = require('fbgraph')
   , mongoose = require('mongoose')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
@@ -18,7 +17,7 @@ mongoose.connect('mongodb://localhost/fbshop');
 everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)
   .appSecret(process.env.FACEBOOK_SECRET)
-  .scope('user_likes,user_photos,user_photo_video_tags')
+  .scope('user_likes,user_photos,user_photo_video_tags,user_events,create_event,friends_events')
   .entryPath('/')
   .redirectPath('/fbhome')
   .findOrCreateUser(function() {
@@ -67,8 +66,6 @@ app.configure('production', function(){
   app.use(express.errorHandler());
 });
 
-var io = require('socket.io').listen(app);
-
 app.helpers({
     appUrl: process.env.PRESTASHOPURL
 });
@@ -86,21 +83,24 @@ app.get('/indexer', routes.index);
  */
 app.get('/images/:productid/:imageid', routes.images);
 
+
+/**
+ * create a group
+ */
+app.get('/createevent/:userid/:productid/:productname', routes.cre ateEvent);
+
 /**
  * Facebook authorized page
  */
 app.get('/fbhome', routes.fbshop);
 
+app.get('/socialize/:userid/:productid/:productname', routes.socialize);
+
+
 app.post('/',function(request,response){
     response.redirect('/');
 });
 
-io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
-});
 
 var port = process.env.PORT || 3000;
 app.listen(port);

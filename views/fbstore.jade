@@ -23,14 +23,6 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             img(src=baseUrl+"/img/c/8-category.jpg")
     #carouselPages
 
-    div.socialplugs
-        script(type="text/javascript", src="/socket.io/socket.io.js")
-        script(type="text/javascript").
-          var socket = io.connect('http://localhost:5000');
-          socket.on('news', function (data) {
-            console.log(data);
-            socket.emit('my other event', { my: 'data' });
-          });
     each items, i in products
         if(items.product.active == 1)
             - var styleToAdd = '';
@@ -38,10 +30,11 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             div.product.box(class=styleToAdd)
                 - var linkRewrite = items.product.link_rewrite.language['#']
                 - var productid=items.product.id
-                a(href='#product'+productid).nyroModal
+                - var productName=items.product.name.language['#']
+                a(href='#product'+productid, prodId=productid, prodName=productName).nyroModal
                     .productImage
                         mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
-                    h2 !{items.product.name.language['#']}
+                    h2 !{productName}
                     .short !{items.product.description_short.language['#'].substr(0,100)}...
                 div
                     .price
@@ -72,6 +65,11 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                         .buyButton
                             a(href=items.product.location,target='_blank') BUY IT NOW
                     div(style = 'float:none;clear:both') &nbsp;
+
+
+                    div.socialplugs(class='socialplugs'+productid)
+                        img(src='/images/FB-ajax-loader.gif')
+
 
                     .popinContent !{items.product.description.language['#']}
                     <!-- AddThis Button BEGIN -->

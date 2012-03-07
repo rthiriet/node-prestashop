@@ -1,0 +1,50 @@
+- urlToCreateEvent = '/createEvent/'+ everyauth.facebook.user.id + '/' +productid + '/' + encodeURIComponent(productname)
+
+h1  Get it for free!!!
+p
+    |Get lot more fun by getting 10 of your friends buying this productand get your product for free !
+    |Really easy to achieve, you just have to invite your friends and get them to buy the products in a two month time!
+    br
+    a#createEvent(href=urlToCreateEvent,onclick="sendRequestViaMultiFriendSelector(); return false;") Create a group and invite your friends
+    br
+    |welcome #{uid} to product #{productid}
+p
+    input(type="button",onclick="sendRequestViaMultiFriendSelector(); return false;",value="Send Request to Many Users with MFS")
+
+script.
+      FB.init({
+        appId  : '291938840860900',
+      });
+
+      function sendRequestViaMultiFriendSelector() {
+        FB.ui({method: 'apprequests',
+          message: 'Lets buy this product together!!',
+          max_recipients:10,
+        }, requestCallback);
+      }
+
+      function requestCallback(response) {
+        // Handle callback here
+        // TODO post a message on invited users' wall
+        console.log('callback');
+        console.log(response);
+        if(response.to.length > 0) {
+            var url = $('#createEvent').attr('href')
+            console.log(url);
+            $('#createEvent').attr('href', url+'?ids=' );
+            for( id in response.to){
+                url = $('#createEvent').attr('href');
+                $('#createEvent').attr('href', url + response.to[id] + ',' );
+            }
+            console.log($('#createEvent').attr('href'));
+            $.ajax({
+              url: $('#createEvent').attr('href'),
+              context: document.body,
+              success: function(data){
+                $('.socialplugs#{productid}').empty();
+                $('.socialplugs#{productid}').append(data);
+              }
+            });
+        }
+
+      }

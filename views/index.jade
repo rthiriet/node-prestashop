@@ -1,2 +1,24 @@
-h1 = title
-welcome #{title}
+h1 blah
+p
+    welcome #{uid} to product #{productid}
+    Buy this product with your friends and get a discount. To start:&nbsp;
+    a(href='/creategp/'+ everyauth.facebook.user.id + '/' +productid) create a group and invite your friends
+p
+    input(type="button",onclick="sendRequestViaMultiFriendSelector(); return false;",value="Send Request to Many Users with MFS")
+
+script.
+      FB.init({
+        appId  : '291938840860900',
+      });
+
+      function sendRequestViaMultiFriendSelector() {
+        FB.ui({method: 'apprequests',
+          message: 'Lets buy this product together!!',
+          max_recipients:10,
+        }, requestCallback);
+      }
+
+      function requestCallback(response) {
+        // Handle callback here
+        // post a message on invited users' wall
+      }

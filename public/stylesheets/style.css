@@ -134,3 +134,9 @@ h3{
     width: 30%;
     float: right;
 }
+
+.socialplugs{
+    padding: 5px;
+    text-align: center;
+    border: 1px solid #B0B0B0;
+}

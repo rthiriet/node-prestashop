@@ -10,9 +10,36 @@ html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
     script(type='text/javascript', src='/javascripts/jquery.ui.widget.min.js')
     script(type='text/javascript', src='/javascripts/jquery.ui.rcarousel.min.js')
     link(rel='stylesheet', href='/stylesheets/rcarousel.css')
-    script(type='text/javascript')
+    script(type='text/javascript').
             $(function() {
-                $('.nyroModal').nyroModal();
+                $('.nyroModal').nyroModal(
+                {
+                            callbacks: {
+                                beforeShowCont: function(nm) {
+                                    if (nm.opener.is('[prodId]')) {
+                                        console.log('callback beforeShowCont ' + nm.opener.attr('prodId'));
+                                        // ajax to /user & product status
+                                        $.ajax({
+                                          url: "/socialize/#{everyauth.facebook.user.id}/" + nm.opener.attr('prodId')+'/'+encodeURIComponent(nm.opener.attr('prodName')),
+                                          context: document.body,
+                                          success: function(data){
+                                            $('.socialplugs'+nm.opener.attr('prodId')).empty();
+                                            $('.socialplugs'+nm.opener.attr('prodId')).append(data);
+                                          }
+                                        });
+                                            // blank product social bloc
+                                            // retrieve status about an event matching the product and the user
+                                            // display matching bloc
+                                    }
+                                },
+                                close: function(nm){
+                                    var img = '<img src="/images/FB-ajax-loader.gif">'
+                                    $('.socialplugs'+nm.opener.attr('prodId')).empty();
+                                    $('.socialplugs'+nm.opener.attr('prodId')).append(img);
+                                }
+                            }
+                        }
+                );
             });
   body.bodyfbapp!= body
     div#fb-root

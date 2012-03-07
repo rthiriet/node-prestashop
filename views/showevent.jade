@@ -1,0 +1,16 @@
+- var totalConfirmed = 1
+
+h1  You're part of a group for this product
+p
+    |here is the list of people invited to buy the product and their status
+    br
+    ul.invitedlist
+    each people, i in invited
+        li
+            img(src='http://graph.facebook.com/'+people.id+'/picture/')
+            .name !{people.name}
+            .status(class=people.rsvp_status) !{people.rsvp_status}
+            -   if(people.rsvp_status == 'attending') totalConfirmed++
+    if(totalConfirmed > 9)
+        .Order
+            a(href='/order') Congratulation, 10 of your friends want to buy this product, contact us to get instruction on how to proceed!
