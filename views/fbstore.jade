@@ -1,3 +1,5 @@
+// TODO clean AJAX handling
+
 - var baseUrl = appUrl;
 
 mixin imgurl(id,link_rewrite,size,productid,type)
@@ -22,6 +24,8 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             img(src=baseUrl+"/img/c/7-category.jpg")
             img(src=baseUrl+"/img/c/8-category.jpg")
     #carouselPages
+
+    // TODO fix redundancy ids (AJAX product info or go through classes instead of ids)
 
     each items, i in products
         if(items.product.active == 1)

@@ -26,17 +26,14 @@ script.
       function requestCallback(response) {
         // Handle callback here
         // TODO post a message on invited users' wall
-        console.log('callback');
-        console.log(response);
         if(response.to.length > 0) {
-            var url = $('#createEvent').attr('href')
-            console.log(url);
-            $('#createEvent').attr('href', url+'?ids=' );
+            $('#createEvent').attr('href', $('#createEvent').attr('href') +'?ids=' );
             for( id in response.to){
-                url = $('#createEvent').attr('href');
-                $('#createEvent').attr('href', url + response.to[id] + ',' );
+                $('#createEvent').attr('href', $('#createEvent').attr('href') + response.to[id]);
+                if (id+1 < response.to.length) {
+                    $('#createEvent').attr('href', $('#createEvent').attr('href') + ',' );
+                }
             }
-            console.log($('#createEvent').attr('href'));
             $.ajax({
               url: $('#createEvent').attr('href'),
               context: document.body,

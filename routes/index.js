@@ -61,7 +61,8 @@ exports.images= function(req,res){
 
 exports.createEvent= function(req,res){
     console.log(req.params.userid + ' ' + req.params.productid);
-    console.log('ids to invite: ' + req.query['id']);
+    inspect(req.query);
+    console.log('ids to invite: ' + req.query['ids']);
     //res.render('index', { uid: req.params.userid, productid : req.params.productid });
     //res.render('image', {image:base64Image});
     var now = new Date();
@@ -70,7 +71,8 @@ exports.createEvent= function(req,res){
     now.setMonth(now.getMonth() + 1);
     var eventEndTime = now.toJSON();
     // page id fucks everything, location is KO, should be page url
-    var eventParams={name:'['+process.env.FACEBOOKSHOPNAME+'] '+req.params.productname,start_time:eventStartTime,end_time:eventEndTime,location:process.env.FACEBOOKSHOPURL,privacy_type:'SECRET'};
+    var eventParams={name:'['+process.env.FACEBOOKSHOPNAME+'] '+ req.params.productname,start_time:eventStartTime,end_time:eventEndTime,location:process.env.FACEBOOKSHOPURL,privacy_type:'SECRET'};
+    inspect(eventParams);
     fbgraph
         .setAccessToken(req.session.auth.facebook.accessToken)
         //retrieve all events for the user
@@ -79,11 +81,23 @@ exports.createEvent= function(req,res){
                 console.log('no error, event created');
                 console.log(response);
                 // an event has been created for the user,
-                // TODO should now invite friends -- req.query['id']
+                // now invite friends -- req.query['ids']
+                fbgraph.post('/'+response.id+'/invited?users='+req.query['ids'],function(error,response){
+                    if(!error){
+                        console.log('no error, users invited to event');
+                        console.log(response);
+                    }
+                    else{
+                        console.log('error : ');
+                        inspect(error);
+                        res.send(error);
+                    }
+                })
             }
             // error with FB API
             else{
-                inspect('error : ' + error);
+                console.log('error : ');
+                inspect(error);
                 res.send(error);
             }
         });
@@ -96,7 +110,7 @@ exports.socialize= function(req,response){
     fbgraph
         .setAccessToken(req.session.auth.facebook.accessToken)
         //retrieve all events for the user
-        //TODO add params to retrieve more infos about the event
+        //retrieve more infos about the event
         .get('/'+req.params.userid+'/events', function(err, res) {
           if(!err){
               console.log('no error on calling FB');
@@ -119,6 +133,7 @@ exports.socialize= function(req,response){
                       //get the list of invited people
                       fbgraph.get('/'+eventId+'/invited', function(err,invited){
                           if(!err){
+                              // TODO order the invited list by rsvp_status
                               response.render('showevent',{eventid:eventId, invited:invited.data});
                           }
                           else response.send(err);
@@ -137,4 +152,4 @@ exports.socialize= function(req,response){
               response.render(err);
           }
         });
-};
+}
