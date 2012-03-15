@@ -20,6 +20,19 @@ exports.index = function(req, res){
   res.render('index', { title: 'Express' })
 };
 
+
+function sortInvited(a,b,userId){
+    //TODO
+    /*if(a.id == userId)
+        return 0;
+    if(a.rsvp_status == 'attending')
+        return 0;
+    if(b.rsvp_status == 'attending')
+        return 1;
+    if(b.rsvp_status == 'attending')
+        return 1;*/
+}
+
 /*
  * GET FB homepage.
  */
@@ -63,14 +76,11 @@ exports.createEvent= function(req,res){
     console.log(req.params.userid + ' ' + req.params.productid);
     inspect(req.query);
     console.log('ids to invite: ' + req.query['ids']);
-    //res.render('index', { uid: req.params.userid, productid : req.params.productid });
-    //res.render('image', {image:base64Image});
     var now = new Date();
     var eventStartTime = now.toJSON();
     console.log(eventStartTime);
     now.setMonth(now.getMonth() + 1);
     var eventEndTime = now.toJSON();
-    // page id fucks everything, location is KO, should be page url
     var eventParams={name:'['+process.env.FACEBOOKSHOPNAME+'] '+ req.params.productname,start_time:eventStartTime,end_time:eventEndTime,location:process.env.FACEBOOKSHOPURL,privacy_type:'SECRET'};
     inspect(eventParams);
     fbgraph
@@ -82,15 +92,18 @@ exports.createEvent= function(req,res){
                 console.log(response);
                 // an event has been created for the user,
                 // now invite friends -- req.query['ids']
-                fbgraph.post('/'+response.id+'/invited?users='+req.query['ids'],function(error,response){
+                fbgraph.post('/'+response.id+'/invited?users='+req.query['ids'],function(error,FBresponse){
                     if(!error){
                         console.log('no error, users invited to event');
-                        console.log(response);
+                        console.log(FBresponse);
+                        console.log("eventid: " + response.id + "ids : " + req.query['ids'])
+                        //render the group part bloc with success message
+                        res.redirect('/socialize/'+req.params.userid+'/'+req.params.productid+'/'+ req.params.productname+'?create=true');
                     }
                     else{
                         console.log('error : ');
                         inspect(error);
-                        res.send(error);
+                        res.render('showevent', { eventid:response.id, invited:req.query['ids'], msg:error, layout:false });
                     }
                 })
             }
@@ -99,6 +112,27 @@ exports.createEvent= function(req,res){
                 console.log('error : ');
                 inspect(error);
                 res.send(error);
+            }
+        });
+    };
+
+exports.inviteToEvent= function(req,res){
+    inspect(req.query);
+    console.log('ids to invite: ' + req.query['ids']);
+    fbgraph
+        .setAccessToken(req.session.auth.facebook.accessToken)
+        //retrieve all events for the user
+        .post('/'+req.params.eventid+'/invited?users='+req.query['ids'],function(error,FBresponse){
+            if(!error){
+                console.log('no error, users invited to event');
+                console.log(FBresponse);
+                //render the group part bloc with success message
+                res.redirect('/socialize/'+req.params.userid+'/'+req.params.productid+'/'+ req.params.productname);
+            }
+            else{
+                console.log('error : ');
+                inspect(error);
+                res.render('showevent', { eventid:req.params.eventid, invited:req.query['ids'], msg:error, layout:false });
             }
         });
     };
@@ -133,13 +167,18 @@ exports.socialize= function(req,response){
                       //get the list of invited people
                       fbgraph.get('/'+eventId+'/invited', function(err,invited){
                           if(!err){
-                              // TODO order the invited list by rsvp_status
-                              response.render('showevent',{eventid:eventId, invited:invited.data});
+                              // TODO order the invited list by rsvp_status 1st me, 2nd attending, 3rd unsure, 4th declined
+                              // invited.data.sort(sortInvited(a,b,req.params.userid));
+                              var msg;
+                              req.param('create') ? msg = 'success' : msg = '';
+                              response.render('showevent',{eventid:eventId, invited:invited.data, msg:msg, confirmMinToOrder:process.env.CONFIRMMINTOORDER, productid:req.params.productid,productname:req.params.productname,confirmStatusToOrder:process.env.STATUSMINTOORDER, layout:false});
                           }
                           else response.send(err);
                       })
                   }
-                  else response.render('socialize', { uid: req.params.userid, productid : req.params.productid, productname : req.params.productname, layout:false });
+                  else {
+                      response.render('socialize', { uid: req.params.userid, productid : req.params.productid, productname : req.params.productname, layout:false });
+                  }
               }
               // no event existing for the user, proposing to create a social event for this product
               else{

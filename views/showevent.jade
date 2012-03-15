@@ -1,6 +1,10 @@
 - var totalConfirmed = 1
+- inviteToEvent = '/inviteToEvent/'+ everyauth.facebook.user.id + '/' + eventid + '/' + productid + '/' + encodeURIComponent(productname)
 
-h1  You're part of a group for this product
+if msg == 'success'
+    h1 Congrats ! You're now part of a group to buy this product
+else
+    h1 You're part of a group to buy this product
 p
     |here is the list of people invited to buy the product and their status
     br
@@ -10,9 +14,11 @@ p
                 img(src='http://graph.facebook.com/'+people.id+'/picture/')
                 .name !{people.name}
                 .status(class=people.rsvp_status) !{people.rsvp_status}
-                -   if(people.rsvp_status == 'attending') totalConfirmed++
-    if(totalConfirmed > 9)
+                -   if(people.rsvp_status == confirmStatusToOrder) totalConfirmed++
+    if(totalConfirmed == confirmMinToOrder)
         .Order
             a(href='/order') Congratulation, 10 of your friends want to buy this product, contact us to get instruction on how to proceed!
     else
         // propose to invite more people
+        p
+            a#createEvent(href=inviteToEvent,productid=productid,onclick="sendRequestViaMultiFriendSelector(); return false;") You sould invite more people to get your free product !!!

@@ -90,6 +90,11 @@ app.get('/images/:productid/:imageid', routes.images);
 app.get('/createevent/:userid/:productid/:productname', routes.createEvent);
 
 /**
+ * invite more people to a group
+ */
+app.get('/inviteToEvent/:userid/:eventid/:productid/:productname', routes.inviteToEvent);
+
+/**
  * Facebook authorized page
  */
 app.get('/fbhome', routes.fbshop);

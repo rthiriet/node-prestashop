@@ -52,3 +52,39 @@ html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
         js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=291938840860900";
         fjs.parentNode.insertBefore(js, fjs);
         }(document, 'script', 'facebook-jssdk'));
+
+
+    script.
+          function sendRequestViaMultiFriendSelector() {
+            FB.init({
+                appId  : '291938840860900',
+            });
+            FB.ui({method: 'apprequests',
+              message: 'Lets buy this product together!!',
+              max_recipients:10,
+            }, requestCallback);
+          }
+
+          function requestCallback(response) {
+            // Handle callback here
+            // TODO post a message on invited users' wall
+            productid=$('#createEvent').attr('productid');
+            if(response.to.length > 0) {
+                $('#createEvent').attr('href', $('#createEvent').attr('href') +'?ids=' );
+                for( id in response.to){
+                    $('#createEvent').attr('href', $('#createEvent').attr('href') + response.to[id]);
+                    if (id+1 < response.to.length) {
+                        $('#createEvent').attr('href', $('#createEvent').attr('href') + ',' );
+                    }
+                }
+                $.ajax({
+                  url: $('#createEvent').attr('href'),
+                  context: document.body,
+                  success: function(data){
+                    $('.socialplugs'+productid).empty();
+                    $('.socialplugs'+productid).append(data);
+                  }
+                });
+            }
+
+          }
