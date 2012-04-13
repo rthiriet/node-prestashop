@@ -11,6 +11,5 @@
     , "everyauth": "0.2.18"
     , "eyes":"0.1.7"
     , "fbgraph":"0.2.1"
-    , "mongoose":"2.5.9"
   }
 }

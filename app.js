@@ -7,12 +7,9 @@ var express = require('express')
   , routes = require('./routes')
   , prestashop = require('./lib/prestashop')
   , everyauth = require('everyauth')
-  , mongoose = require('mongoose')
   , inspect = require('eyes').inspector({styles: {all: 'magenta'}});
 
 inspect(process.env);
-
-mongoose.connect('mongodb://localhost/fbshop');
 
 everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)

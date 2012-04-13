@@ -11,141 +11,155 @@ mixin imgurl(id,link_rewrite,size,productid,type)
         type = 'p'
     img(src = baseUrl + '/' + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
 
-#fbbody
-    #header.box
-        h1 Welcome to the Full6Berlin social shop
-        //- TODO add dynamic category pictures retrieving
-        //header carousel
-        #carouselHeader
-            img(src=baseUrl+"/img/c/5-category.jpg")
-            img(src=baseUrl+"/img/c/6-category.jpg")
-            img(src=baseUrl+"/img/c/7-category.jpg")
-            img(src=baseUrl+"/img/c/8-category.jpg")
-    #carouselPages
+        //- TODO add dynamic category pictures retrieving /api/categories
+.container_wrap
+    .container
+        //- TODO add dynamic shop name retrieving
+        h1 Full6Berlin social shop
+        #header
+            .box
+                //header carousel
+                #carouselHeader
+                    img(src=baseUrl+"/img/c/5-category.jpg")
+                    img(src=baseUrl+"/img/c/6-category.jpg")
+                    img(src=baseUrl+"/img/c/7-category.jpg")
+                    img(src=baseUrl+"/img/c/8-category.jpg")
+            #carouselPages
 
-    // TODO fix redundancy ids (AJAX product info or go through classes instead of ids)
+        // TODO fix redundancy ids (AJAX product info or go through classes instead of ids)
 
-    each items, i in products
-        if(items.product.active == 1)
-            - var styleToAdd = '';
-            - (i%2 == 0) ? styleToAdd = '' : styleToAdd = 'rightBox'
-            div.product.box(class=styleToAdd)
-                - var linkRewrite = items.product.link_rewrite.language['#']
-                - var productid=items.product.id
-                - var productName=items.product.name.language['#']
-                a(href='#product'+productid, prodId=productid, prodName=productName).nyroModal
-                    .productImage
-                        mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
-                    h2 !{productName}
-                    .short !{items.product.description_short.language['#'].substr(0,100)}...
-                div
-                    .price
-                        a(href='#product'+productid).nyroModal
-                            &euro; !{items.product.price}
-                    <!-- AddThis Button BEGIN -->
-                    div.addthis_toolbox.addthis_default_style.addthisFBShop(addthis:url=items.product.location)
-                        a.addthis_button_preferred_1
-                        a.addthis_button_preferred_4
-                        a.addthis_button_compact
-                    script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f46883a499d53f1")
-                    <!-- AddThis Button END -->
+        #content
+            each items, i in products
+                if(items.product.active == 1)
+                    - var styleToAdd = '';
+                    - (i%3 == 0) ? styleToAdd = 'first' : styleToAdd = ''
+                    div.product.box(class=styleToAdd)
+                        - var linkRewrite = items.product.link_rewrite.language['#']
+                        - var productid=items.product.id
+                        - var productName=items.product.name.language['#']
+                        a(href='#product'+productid, prodId=productid, prodName=productName).nyroModal
+                            .productImage
+                                mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
+                            h2 !{productName}
+                            .short !{items.product.description_short.language['#'].substr(0,100)}...
+                        div
+                            .price
+                                a(href='#product'+productid).nyroModal
+                                    - var position = items.product.price.indexOf(".");
+                                    - var integ, decim
+                                    - if (position != -1)
+                                        - integ = items.product.price.substring(0,position);
+                                        - decim = items.product.price.substr(position+1,items.product.price.length-(position+1));
+                                    - else
+                                        - integ = items.product.price;
+                                        - decim = "00";
+                                    small &euro;&nbsp;
+                                    !{integ}.
+                                    sup !{decim}
+                            <!-- AddThis Button BEGIN -->
+                            div.addthis_toolbox.addthis_default_style.addthisFBShop(addthis:url=items.product.location)
+                                a.addthis_button_preferred_1
+                                a.addthis_button_preferred_4
+                                a.addthis_button_compact
+                            script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f46883a499d53f1")
+                            <!-- AddThis Button END -->
 
-                //product popin
-                div(id='product'+productid).hidden.popin
-                    #popinHeader
-                        #popinTitle
-                            h3 !{items.product.name.language['#']}
-                        #popinPrice
-                            .price &euro; !{items.product.price}
-                    //carousel
-                    #carousel
-                        each image in items.product.associations.images.image
-                            a(href='/images/'+productid+'/'+image.id+'/').nyroModal
-                                mixin imgurl(image.id,linkRewrite,'carousel', productid)
-                    #popinBuy
-                        .short !{items.product.description_short.language['#']}
-                        .buyButton
-                            a(href=items.product.location,target='_blank') BUY IT NOW
-                    div(style = 'float:none;clear:both') &nbsp;
-
-
-                    div.socialplugs(class='socialplugs'+productid)
-                        img(src='/images/FB-ajax-loader.gif')
-
-
-                    .popinContent !{items.product.description.language['#']}
-                    <!-- AddThis Button BEGIN -->
-                    div.addthis_toolbox.addthis_default_style(addthis:url=items.product.location)
-                        a.addthis_button_facebook_like(fb:like:layout="button_count")
-                        a.addthis_button_tweet
-                        a.addthis_button_google_plusone(g:plusone:size="medium")
-                        a.addthis_counter.addthis_pill_style
-                    script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
-                    <!-- AddThis Button END -->
-                    <!-- FB COmments BEGIN -->
-                    div.fb-comments(data-href=items.product.location,data-num-posts="2",data-width="470",style="margin-top:10px;")
-                    <!-- FB COmments END -->
+                        //product popin
+                        div(id='product'+productid).hidden.popin
+                            #popinHeader
+                                #popinTitle
+                                    h3 !{items.product.name.language['#']}
+                                #popinPrice
+                                    .price &euro; !{items.product.price}
+                            //carousel
+                            #carousel
+                                each image in items.product.associations.images.image
+                                    a(href='/images/'+productid+'/'+image.id+'/').nyroModal
+                                        mixin imgurl(image.id,linkRewrite,'carousel', productid)
+                            #popinBuy
+                                .short !{items.product.description_short.language['#']}
+                                .buyButton
+                                    a(href=items.product.location,target='_blank') BUY IT NOW
+                            div(style = 'float:none;clear:both') &nbsp;
 
 
-    div(style = 'float:none;') &nbsp;
-    script(type="text/javascript").
-        jQuery(function($) {
-            $( "#carousel" ).rcarousel({
-                width: 625,
-                height: 300,
-                visible: 1,
-                step: 1,
-                speed: 700,
-                auto: {enabled: true},
-                });
+                            div.socialplugs(class='socialplugs'+productid)
+                                img(src='/images/FB-ajax-loader.gif')
 
-            function generatePages() {
-                var _total, i, _link;
 
-                _total = $( "#carouselHeader" ).rcarousel( "getTotalPages" );
+                            .popinContent !{items.product.description.language['#']}
+                            <!-- AddThis Button BEGIN -->
+                            div.addthis_toolbox.addthis_default_style(addthis:url=items.product.location)
+                                a.addthis_button_facebook_like(fb:like:layout="button_count")
+                                a.addthis_button_tweet
+                                a.addthis_button_google_plusone(g:plusone:size="medium")
+                                a.addthis_counter.addthis_pill_style
+                            script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
+                            <!-- AddThis Button END -->
+                            <!-- FB COmments BEGIN -->
+                            div.fb-comments(data-href=items.product.location,data-num-posts="2",data-width="470",style="margin-top:10px;")
+                            <!-- FB COmments END -->
 
-                for ( i = 0; i < _total; i++ ) {
-                    _link = $( "<a href='#'></a>" );
 
-                    $(_link)
-                        .bind("click", {page: i},
-                            function( event ) {
-                                $( "#carouselHeader" ).rcarousel( "goToPage", event.data.page );
-                                event.preventDefault();
-                            }
-                        )
-                        .addClass( "bullet off" )
-                        .appendTo( "#carouselPages" );
+        div(style = 'float:none;') &nbsp;
+        script(type="text/javascript").
+            jQuery(function($) {
+                $( "#carousel" ).rcarousel({
+                    width: 625,
+                    height: 300,
+                    visible: 1,
+                    step: 1,
+                    speed: 700,
+                    auto: {enabled: true},
+                    });
+
+                function generatePages() {
+                    var _total, i, _link;
+
+                    _total = $( "#carouselHeader" ).rcarousel( "getTotalPages" );
+
+                    for ( i = 0; i < _total; i++ ) {
+                        _link = $( "<a href='#'></a>" );
+
+                        $(_link)
+                            .bind("click", {page: i},
+                                function( event ) {
+                                    $( "#carouselHeader" ).rcarousel( "goToPage", event.data.page );
+                                    event.preventDefault();
+                                }
+                            )
+                            .addClass( "bullet off" )
+                            .appendTo( "#carouselPages" );
+                    }
+
+                    // mark first page as active
+                    $( "a:eq(0)", "#carouselPages" )
+                        .removeClass( "off" )
+                        .addClass( "on" );
+
+                    //calculate nav bar width
+                    $( '#carouselPages' ).css('width',($( "#carouselHeader" ).rcarousel( "getTotalPages" ) * $("a:eq(0)", "#carouselPages").outerWidth(true)));
+
                 }
 
-                // mark first page as active
-                $( "a:eq(0)", "#carouselPages" )
-                    .removeClass( "off" )
-                    .addClass( "on" );
+                function pageLoaded( event, data ) {
+                    $( "a.on", "#carouselPages" )
+                        .removeClass( "on" )
+                        .addClass( "off" );
 
-                //calculate nav bar width
-                $( '#carouselPages' ).css('width',($( "#carouselHeader" ).rcarousel( "getTotalPages" ) * $("a:eq(0)", "#carouselPages").outerWidth(true)));
-
-            }
-
-            function pageLoaded( event, data ) {
-                $( "a.on", "#carouselPages" )
-                    .removeClass( "on" )
-                    .addClass( "off" );
-
-                $( "a", "#carouselPages" )
-                    .eq( data.page )
-                    .removeClass( "off" )
-                    .addClass( "on" );
-            }
-            $( "#carouselHeader" ).rcarousel({
-                width: 508,
-                height: 200,
-                visible: 1,
-                step: 1,
-                speed: 500,
-                auto: {enabled: true},
-                start: generatePages,
-                pageLoaded: pageLoaded
-                });
-        });
+                    $( "a", "#carouselPages" )
+                        .eq( data.page )
+                        .removeClass( "off" )
+                        .addClass( "on" );
+                }
+                $( "#carouselHeader" ).rcarousel({
+                    width: 788,
+                    height: 300,
+                    visible: 1,
+                    step: 1,
+                    speed: 500,
+                    auto: {enabled: true},
+                    start: generatePages,
+                    pageLoaded: pageLoaded
+                    });
+            });

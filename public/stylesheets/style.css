@@ -4,13 +4,17 @@ body.bodyfbapp {
     font: 12px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
+sup {
+    line-height: 0.6em;
+    font-size:10px;
+}
 a {
     color: #000000;
     text-decoration: none;
 }
 
 h1 {
-    background-color: #d8d8da;
+    /*background-color: #d8d8da;*/
     margin: 0;
     font-size: 1.6em;
     text-align: center;
@@ -19,34 +23,41 @@ h1 {
 h2{
     margin: 15px 0 0;
     font-size: 1.2em;
+    text-align: center;
 }
 h3{
     margin: 0px 0 15px;
     font-size: 1.8em;
 }
-#fbbody{
-    width:520px;
+.container_wrap {
+		background:url(../images/tail.gif) repeat-x 0 0 #fff; height:910px;
+	}
+.container {
+    width:800px;
     background-color: #f4f4f7;
     padding: 5px;
     overflow: hidden;
+    margin:0 auto;
 }
 .box {
     background-color:white;
-    border:1px solid #e3e3e3;
+    border:1px solid #cccccc;
     padding: 5px;
-    float: left;
-    margin-top: 25px;
+    /*float: left;
+    margin-top: 25px;*/
 }
 
 #header{
-    width:508px;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+    float: left;
 }
+
 .product {
-    width:245px;
+    width:248px;
     height: 285px;
     float: left;
     display: block;
+    margin-bottom: 20px;
 }
 .productImage{
     width:100%;
@@ -55,8 +66,11 @@ h3{
     overflow: hidden;
     text-align: center;
 }
-.rightBox{
-    margin-left: 6px;
+#content .box {
+    margin-left: 10px;
+}
+.first{
+    margin-left: 0px !important;
 }
 
 .hidden{
@@ -67,8 +81,9 @@ h3{
     padding: 5px;
 }
 .price{
-    font-weight: bold;
+    font-weight: bolder;
     float: left;
+    font-size: 14px;
 }
 #carousel{
     border: 1px solid #e3e2e2;
@@ -77,7 +92,7 @@ h3{
 }
 
 #carouselPages {
-    margin: 0 auto;
+    margin: 10px auto;
     width:150px;
     text-align: center;
 }
