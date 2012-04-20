@@ -64,7 +64,8 @@ app.configure('production', function(){
 app.helpers({
     appUrl: process.env.PRESTASHOPURL,
     groupBuyStatus : process.env.GROUPBUYSTATUS,
-    FBAppUrl: process.env.FBAPPURL
+    FBAppUrl: process.env.FBAPPURL,
+    defaultLanguage: process.env.APILANGUAGE
 });
 
 everyauth.debug=true;
