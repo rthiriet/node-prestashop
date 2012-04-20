@@ -14,7 +14,7 @@ inspect(process.env);
 everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)
   .appSecret(process.env.FACEBOOK_SECRET)
-  .scope('user_likes,user_photos,user_photo_video_tags,user_events,create_event,friends_events')
+  .scope('')
   .entryPath('/')
   .redirectPath('/fbhome')
   .findOrCreateUser(function() {
