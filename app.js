@@ -21,8 +21,6 @@ everyauth.facebook
     return({});
   });
 
-var api = require('./controllers/api.js');
-
 everyauth.everymodule.findUserById( function (userId, callback) {
   return req.session.auth.facebook.user;
   // callback has the signature, function (err, user) {...}
