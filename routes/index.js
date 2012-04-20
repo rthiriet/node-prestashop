@@ -1,6 +1,5 @@
 var prestashop = require('../lib/prestashop'),
     inspect = require('eyes').inspector({styles: {all: 'magenta'}}),
-    mongoapi = require('../controllers/api'),
     fbgraph = require('fbgraph'),
     prestashopImage = require('../lib/prestashopimages');
 
@@ -44,8 +43,7 @@ exports.fbshop= function(req,res){
     console.log('productList requested');
     console.log('FB user id : ' + req.session.auth.facebook.user.id);
     inspect(req.session.auth.facebook);
-    //mongoapi.createUser(req.session.auth.facebook.user.id,req.session.auth.facebook.user.first_name,req.session.auth.facebook.user.last_name);
-    var user = mongoapi.findUser(req.session.auth.facebook.user.id + 1);
+
     products
         .on('productListReceived',function(data){
             //res.render('test2',{ title: 'test'});
