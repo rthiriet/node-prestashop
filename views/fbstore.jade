@@ -56,57 +56,68 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                                     small &euro;&nbsp;
                                     !{integ}.
                                     sup !{decim}
+
                             <!-- AddThis Button BEGIN -->
                             div.addthis_toolbox.addthis_default_style.addthisFBShop(addthis:url=items.product.location)
-                                a.addthis_button_preferred_1
-                                a.addthis_button_preferred_4
+                                a.addthis_button_facebook
+                                a.addthis_button_twitter
                                 a.addthis_button_compact
                             script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f46883a499d53f1")
                             <!-- AddThis Button END -->
 
                         //product popin
                         div(id='product'+productid).hidden.popin
-                            #popinHeader
-                                #popinTitle
+                            .popinProduct
+                                //carousel
+                                .box(style="background-color:grey;")
+                                    .carousel(id='carousel'+productid)
+                                        each image in items.product.associations.images.image
+                                            a(href='/images/'+productid+'/'+image.id+'/')
+                                                mixin imgurl(image.id,linkRewrite,'carousel', productid)
+
+
+                                .popinHeader
                                     h3 !{items.product.name.language['#']}
-                                #popinPrice
-                                    .price &euro; !{items.product.price}
-                            //carousel
-                            #carousel
-                                each image in items.product.associations.images.image
-                                    a(href='/images/'+productid+'/'+image.id+'/').nyroModal
-                                        mixin imgurl(image.id,linkRewrite,'carousel', productid)
-                            #popinBuy
-                                .short !{items.product.description_short.language['#']}
-                                .buyButton
-                                    a(href=items.product.location,target='_blank') BUY IT NOW
-                            div(style = 'float:none;clear:both') &nbsp;
+                                    div(style='width:100%;margin-top:15px;')
+                                        .buyButton
+                                            a(href=items.product.location,target='_blank')
+                                                .buyit Buy it for
+                                                .popinPrice
+                                                    .price
+                                                        small &euro;&nbsp;
+                                                        !{integ}.
+                                                        sup !{decim}
+                                .popinBuy !{items.product.description_short.language['#']}
+                                .popinContent !{items.product.description.language['#']}
+
+                                <!-- AddThis Button BEGIN -->
+                                div.addthis_toolbox.addthis_default_style(addthis:url=items.product.location)
+                                    a.addthis_button_facebook_like(fb:like:layout="button_count")
+                                    a.addthis_button_tweet
+                                    a.addthis_button_google_plusone(g:plusone:size="medium")
+                                    a.addthis_counter.addthis_pill_style
+                                script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
+                                <!-- AddThis Button END -->
 
 
-                            div.socialplugs(class='socialplugs'+productid)
-                                img(src='/images/FB-ajax-loader.gif')
+                                //-
+                                    if(groupBuyStatus == "true")
+                                        div.socialplugs(class='socialplugs'+productid)
+                                            img(src='/images/FB-ajax-loader.gif')
 
 
-                            .popinContent !{items.product.description.language['#']}
-                            <!-- AddThis Button BEGIN -->
-                            div.addthis_toolbox.addthis_default_style(addthis:url=items.product.location)
-                                a.addthis_button_facebook_like(fb:like:layout="button_count")
-                                a.addthis_button_tweet
-                                a.addthis_button_google_plusone(g:plusone:size="medium")
-                                a.addthis_counter.addthis_pill_style
-                            script(type="text/javascript",src="http://s7.addthis.com/js/250/addthis_widget.js#pubid=xa-4f4687561ab9cd0b")
-                            <!-- AddThis Button END -->
-                            <!-- FB COmments BEGIN -->
-                            div.fb-comments(data-href=items.product.location,data-num-posts="2",data-width="470",style="margin-top:10px;")
-                            <!-- FB COmments END -->
+
+                                <!-- FB COmments BEGIN -->
+                                div.fb-comments(data-href=items.product.location,data-num-posts="2",data-width="470",style="margin-top:10px;")
+                                <!-- FB COmments END -->
 
 
         div(style = 'float:none;') &nbsp;
         script(type="text/javascript").
             jQuery(function($) {
-                $( "#carousel" ).rcarousel({
-                    width: 625,
-                    height: 300,
+                $( ".carousel" ).rcarousel({
+                    width: 730,
+                    height: 500,
                     visible: 1,
                     step: 1,
                     speed: 700,
@@ -162,4 +173,16 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                     start: generatePages,
                     pageLoaded: pageLoaded
                     });
+
+                // h2 all the same max size
+                Array.max = function( array ){
+                    return Math.max.apply( Math, array );
+                };
+                var heights = new Array();
+                $(".product h2").each(function(index){
+                    heights.push($(this).height());
+                });
+                $(".product h2").each(function(index){
+                    $(this).height(Array.max(heights));
+                });
             });

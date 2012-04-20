@@ -26,8 +26,9 @@ h2{
     text-align: center;
 }
 h3{
-    margin: 0px 0 15px;
+    margin: 15px 0 0;
     font-size: 1.8em;
+    text-transform: uppercase;
 }
 .container_wrap {
 		background:url(../images/tail.gif) repeat-x 0 0 #fff; height:910px;
@@ -85,9 +86,9 @@ h3{
     float: left;
     font-size: 14px;
 }
-#carousel{
+.carousel{
     border: 1px solid #e3e2e2;
-    padding: 5px;
+    margin: 2px auto !important;
     background-color: white;
 }
 
@@ -113,23 +114,24 @@ h3{
     background: url(/images/bulletoff.png) center center no-repeat;
 }
 
-#popinHeader{
+.popinHeader{
     width:100%;
 }
-#popinTitle{
+.popinTitle{
     float: left;
     width: 80%;
 }
-#popinPrice{
+.popinPrice{
     font-size: 1.2em;
-    padding-top: 7px;
     text-align: right;
+    line-height: 0.7em;
 }
-#popinPrice .price{
+.popinPrice .price{
     float: none!important;
+    font-size: 18px;
 }
-#popinBuy{
-    width:100%;
+.popinBuy{
+    width:70%;
     margin-top: 15px;
 }
 .short{
@@ -137,22 +139,24 @@ h3{
 }
 .buyButton{
     background-color: #fe830f;
-    padding: 10px;
+    padding: 20px 10px 0;
     text-align: center;
     border: 1px solid #da6c03;
     float: right;
+    width:20%;
+    height:40px;
 }
+
 .buyButton a, .buyButton a:hover, .buyButton a:visited {
     color: #ffffff;
     font-weight: bold;
 }
-#popinBuy p{
+.popinBuy p{
     margin: 0;
     padding: 0;
     color: #6E6E6E;
 }
 .addthisFBShop{
-    width: 30%;
     float: right;
 }
 
@@ -161,3 +165,49 @@ h3{
     text-align: center;
     border: 1px solid #B0B0B0;
 }
+.popinContent{
+    width:70%;
+}
+.popinProduct{
+    width:750px;
+    background:#f3f5f4;
+    padding-right: 20px
+}
+.popinProduct .short{
+    font-variant: small-caps;
+    line-height: 1em;
+}
+
+.buyit{
+    float: left;
+}
+
+/* Custom Columns
+-------------------------------------------------------------- */
+
+	.column_1, .column_2, { float:left;}
+
+	.column_1 { width:485px;}
+	.column_2 { width:265px;}
+
+
+/* Clear Floated Elements
+-------------------------------------------------------------- */
+
+	.clear, .clearfix:after {
+		clear: both;
+		display: block;
+		overflow: hidden;
+		visibility: hidden;
+		width: 0;
+		height: 0;
+	}
+
+	.clearfix:after {
+		content: '.';
+		font-size: 	0;
+		line-height: 0;
+	}
+	.clearfix {	position:relative; display: inline-block;}
+	* html .clearfix {	height: 1%;}
+	.clearfix {	display: block;}

@@ -11,6 +11,7 @@ html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
     script(type='text/javascript', src='/javascripts/jquery.ui.rcarousel.min.js')
     script(type='text/javascript', src='/javascripts/main.js')
     link(rel='stylesheet', href='/stylesheets/rcarousel.css')
+
     script(type='text/javascript').
             $(function() {
                 $('.nyroModal').nyroModal(
@@ -20,17 +21,18 @@ html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
                                     if (nm.opener.is('[prodId]')) {
                                         console.log('callback beforeShowCont ' + nm.opener.attr('prodId'));
                                         // ajax to /user & product status
-                                        $.ajax({
-                                          url: "/socialize/#{everyauth.facebook.user.id}/" + nm.opener.attr('prodId')+'/'+encodeURIComponent(nm.opener.attr('prodName')),
-                                          context: document.body,
-                                          success: function(data){
-                                            $('.socialplugs'+nm.opener.attr('prodId')).empty();
-                                            $('.socialplugs'+nm.opener.attr('prodId')).append(data);
-                                          }
-                                        });
-                                            // blank product social bloc
-                                            // retrieve status about an event matching the product and the user
-                                            // display matching bloc
+                                        //-
+                                            $.ajax({
+                                              url: "/socialize/#{everyauth.facebook.user.id}/" + nm.opener.attr('prodId')+'/'+encodeURIComponent(nm.opener.attr('prodName')),
+                                              context: document.body,
+                                              success: function(data){
+                                                $('.socialplugs'+nm.opener.attr('prodId')).empty();
+                                                $('.socialplugs'+nm.opener.attr('prodId')).append(data);
+                                              }
+                                            });
+                                                // blank product social bloc
+                                                // retrieve status about an event matching the product and the user
+                                                // display matching bloc
                                     }
                                 },
                                 close: function(nm){
@@ -44,47 +46,58 @@ html(xmlns:fb="http://ogp.me/ns/fb#",xmlns="http://www.w3.org/1999/xhtml")
             });
   body.bodyfbapp!= body
     div#fb-root
-    script.
-        (function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/fr_FR/all.js#xfbml=1&appId=291938840860900";
-        fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
 
-
-    script.
-          function sendRequestViaMultiFriendSelector() {
+    script
+        window.fbAsyncInit = function() {
             FB.init({
-                appId  : '291938840860900',
+              appId      : '291938840860900', // App ID
+              channelUrl : '//!{FBAppUrl}/channel.html', // Channel File
+              status     : true, // check login status
+              cookie     : true, // enable cookies to allow the server to access the session
+              xfbml      : true  // parse XFBML
             });
-            FB.ui({method: 'apprequests',
-              message: 'Lets buy this product together!!',
-              max_recipients:10,
-            }, requestCallback);
-          }
 
-          function requestCallback(response) {
-            // Handle callback here
-            // TODO post a message on invited users' wall
-            productid=$('#createEvent').attr('productid');
-            if(response.to.length > 0) {
-                $('#createEvent').attr('href', $('#createEvent').attr('href') +'?ids=' );
-                for( id in response.to){
-                    $('#createEvent').attr('href', $('#createEvent').attr('href') + response.to[id]);
-                    if (id+1 < response.to.length) {
-                        $('#createEvent').attr('href', $('#createEvent').attr('href') + ',' );
+            // Additional initialization code here
+          };
+
+          // Load the SDK Asynchronously
+          (function(d){
+             var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+             if (d.getElementById(id)) {return;}
+             js = d.createElement('script'); js.id = id; js.async = true;
+             js.src = "//connect.facebook.net/en_US/all.js";
+             ref.parentNode.insertBefore(js, ref);
+           }(document));
+
+    if(groupBuyStatus == "true")
+        script.
+              function sendRequestViaMultiFriendSelector() {
+                FB.ui({method: 'apprequests',
+                  message: 'Lets buy this product together!!',
+                  max_recipients:10,
+                }, requestCallback);
+              }
+
+              function requestCallback(response) {
+                // Handle callback here
+                // TODO post a message on invited users' wall
+                productid=$('#createEvent').attr('productid');
+                if(response.to.length > 0) {
+                    $('#createEvent').attr('href', $('#createEvent').attr('href') +'?ids=' );
+                    for( id in response.to){
+                        $('#createEvent').attr('href', $('#createEvent').attr('href') + response.to[id]);
+                        if (id+1 < response.to.length) {
+                            $('#createEvent').attr('href', $('#createEvent').attr('href') + ',' );
+                        }
                     }
+                    $.ajax({
+                      url: $('#createEvent').attr('href'),
+                      context: document.body,
+                      success: function(data){
+                        $('.socialplugs'+productid).empty();
+                        $('.socialplugs'+productid).append(data);
+                      }
+                    });
                 }
-                $.ajax({
-                  url: $('#createEvent').attr('href'),
-                  context: document.body,
-                  success: function(data){
-                    $('.socialplugs'+productid).empty();
-                    $('.socialplugs'+productid).append(data);
-                  }
-                });
-            }
 
-          }
+              }
