@@ -34,7 +34,6 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                     - var styleToAdd = '';
                     - (i%3 == 0) ? styleToAdd = 'first' : styleToAdd = ''
                     div.product.box(class=styleToAdd)
-                        - console.log(items.product.description_short.language)
                         - var linkRewrite = items.product.link_rewrite.language['#']
                         - var productid=items.product.id
                         - var productName=items.product.name.language['#']
@@ -42,7 +41,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                             .productImage
                                 mixin imgurl(items.product.id_default_image['#'],linkRewrite, '',productid)
                             h2 !{productName}
-                            .short !{items.product.description_short.language['#'].substr(0,100)}...
+                            .short !{items.product.description_short.language['#'].substr(0,85)}...
                         div
                             .price
                                 a(href='#product'+productid).nyroModal
