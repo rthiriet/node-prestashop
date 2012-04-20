@@ -34,7 +34,7 @@ mixin imgurl(id,link_rewrite,size,productid,type)
                     - var styleToAdd = '';
                     - (i%3 == 0) ? styleToAdd = 'first' : styleToAdd = ''
                     div.product.box(class=styleToAdd)
-                        - console.log(items.product.link_rewrite.language)
+                        - console.log(items.product.description_short.language)
                         - var linkRewrite = items.product.link_rewrite.language['#']
                         - var productid=items.product.id
                         - var productName=items.product.name.language['#']
