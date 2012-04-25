@@ -15,6 +15,7 @@ everyauth.facebook
   .appId(process.env.FACEBOOK_APP_ID)
   .appSecret(process.env.FACEBOOK_SECRET)
   .scope('')
+  .moduleTimeout(99999)
   .entryPath('/')
   .redirectPath('/fbhome')
   .findOrCreateUser(function() {
