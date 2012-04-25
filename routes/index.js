@@ -39,20 +39,27 @@ function sortInvited(a,b,userId){
 exports.fbshop= function(req,res){
     //inspect(req.session);
     var prestashopInst = new prestashop();
+    var categories = prestashopInst.categoryList();
     var products = prestashopInst.productList();
     console.log('productList requested');
     console.log('FB user id : ' + req.session.auth.facebook.user.id);
     inspect(req.session.auth.facebook);
-
-    products
-        .on('productListReceived',function(data){
-            //res.render('test2',{ title: 'test'});
-        console.log('about to go to render');
-            res.render('fbstore', { products: data });
+    categories.
+        on('categoryListReceived',function(categoryList){
+            products
+                .on('productListReceived',function(data){
+                    //res.render('test2',{ title: 'test'});
+                console.log('about to go to render');
+                    res.render('fbstore', { products: data, categories : categoryList });
+                        })
+                .on('error',function(data){
+                    res.send(data);
+                        })
                 })
         .on('error',function(data){
-            res.send(data);
-                })
+                            res.send(data);
+                                }
+        )
     };
 
 /*

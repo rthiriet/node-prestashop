@@ -11,7 +11,6 @@ mixin imgurl(id,link_rewrite,size,productid,type)
         type = 'p'
     img(src = baseUrl + '/' + productid + "-" + id + size + '/' + link_rewrite + '.jpg')
 
-        //- TODO add dynamic category pictures retrieving /api/categories
 .container_wrap
     .container
         //- TODO add dynamic shop name retrieving
@@ -20,6 +19,8 @@ mixin imgurl(id,link_rewrite,size,productid,type)
             .box
                 //header carousel
                 #carouselHeader
+                    each category in categories
+                        img(src=baseUrl+"/img/c/"+category+"-category.jpg")
                     img(src=baseUrl+"/img/c/5-category.jpg")
                     img(src=baseUrl+"/img/c/6-category.jpg")
                     img(src=baseUrl+"/img/c/7-category.jpg")
